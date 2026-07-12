@@ -1,4 +1,5 @@
 import TaskForm from './components/TaskForm'
+import TaskList from './components/TaskList'
 import { useTasks } from './hooks/useTasks'
 
 export default function App() {
@@ -18,15 +19,8 @@ export default function App() {
 
         <TaskForm onCreate={create} />
 
-        <div className="mt-6">
-          {loading ? (
-            <p className="py-8 text-center text-slate-500">Chargement...</p>
-          ) : (
-            <p className="text-sm text-slate-500">
-              {tasks.length} tache{tasks.length > 1 ? 's' : ''} enregistree
-              {tasks.length > 1 ? 's' : ''}
-            </p>
-          )}
+        <div className="mt-8">
+          <TaskList tasks={tasks} loading={loading} />
         </div>
       </div>
     </div>
