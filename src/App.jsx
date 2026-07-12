@@ -1,9 +1,12 @@
+import { useState } from 'react'
+import TaskEditModal from './components/TaskEditModal'
 import TaskForm from './components/TaskForm'
 import TaskList from './components/TaskList'
 import { useTasks } from './hooks/useTasks'
 
 export default function App() {
-  const { tasks, loading, error, create } = useTasks()
+  const { tasks, loading, error, create, update } = useTasks()
+  const [tacheEnEdition, setTacheEnEdition] = useState(null)
 
   return (
     <div className="min-h-screen bg-slate-100">
@@ -20,9 +23,15 @@ export default function App() {
         <TaskForm onCreate={create} />
 
         <div className="mt-8">
-          <TaskList tasks={tasks} loading={loading} />
+          <TaskList tasks={tasks} loading={loading} onEdit={setTacheEnEdition} />
         </div>
       </div>
+
+      <TaskEditModal
+        task={tacheEnEdition}
+        onSave={update}
+        onClose={() => setTacheEnEdition(null)}
+      />
     </div>
   )
 }
