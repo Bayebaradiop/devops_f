@@ -23,6 +23,27 @@ Si le backend tourne ailleurs :
 VITE_API_URL=http://mon-backend:8090 npm run dev
 ```
 
+## Lancer avec Docker
+
+Le `docker-compose.yml` orchestre les trois services (db + backend + front) et vit
+**a la racine `medishop/`**, a cote de ce depot et de celui du backend :
+
+```
+medishop/
+├── docker-compose.yml
+├── backend/   <- depot devops_b
+└── front/     <- ce depot (devops_f)
+```
+
+```bash
+cd ..            # racine medishop/
+docker compose up --build
+```
+
+Le front est alors servi par nginx sur http://localhost:5173. En production nginx joue
+le meme role que le proxy Vite en dev : il relaie `/api` vers le backend
+(voir [nginx.conf](nginx.conf)).
+
 ## Fonctionnalites
 
 - Liste des medicaments
