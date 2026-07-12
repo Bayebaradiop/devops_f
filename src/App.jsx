@@ -5,7 +5,7 @@ import TaskList from './components/TaskList'
 import { useTasks } from './hooks/useTasks'
 
 export default function App() {
-  const { tasks, loading, error, create, update } = useTasks()
+  const { tasks, loading, error, create, update, remove } = useTasks()
   const [tacheEnEdition, setTacheEnEdition] = useState(null)
 
   return (
@@ -23,7 +23,12 @@ export default function App() {
         <TaskForm onCreate={create} />
 
         <div className="mt-8">
-          <TaskList tasks={tasks} loading={loading} onEdit={setTacheEnEdition} />
+          <TaskList
+            tasks={tasks}
+            loading={loading}
+            onEdit={setTacheEnEdition}
+            onDelete={remove}
+          />
         </div>
       </div>
 

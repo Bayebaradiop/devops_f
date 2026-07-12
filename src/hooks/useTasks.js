@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import {
   createTask as apiCreate,
+  deleteTask as apiDelete,
   getTasks as apiGetAll,
   updateTask as apiUpdate,
   messageErreur,
@@ -55,5 +56,17 @@ export function useTasks() {
     }
   }, [])
 
-  return { tasks, loading, error, setError, refresh, create, update }
+  const remove = useCallback(async (id) => {
+    setError(null)
+    try {
+      await apiDelete(id)
+      setTasks((precedentes) => precedentes.filter((t) => t.id !== id))
+      return true
+    } catch (e) {
+      setError(messageErreur(e, 'Impossible de supprimer la tache'))
+      return false
+    }
+  }, [])
+
+  return { tasks, loading, error, setError, refresh, create, update, remove }
 }
