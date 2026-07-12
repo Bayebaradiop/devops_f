@@ -1,6 +1,6 @@
 import TaskItem from './TaskItem'
 
-export default function TaskList({ tasks, loading, onEdit }) {
+export default function TaskList({ tasks, loading, onEdit, onDelete }) {
   if (loading) {
     return <p className="py-10 text-center text-slate-500">Chargement des taches...</p>
   }
@@ -16,7 +16,7 @@ export default function TaskList({ tasks, loading, onEdit }) {
   return (
     <ul className="space-y-3">
       {tasks.map((task) => (
-        <TaskItem key={task.id} task={task} onEdit={onEdit} />
+        <TaskItem key={task.id} task={task} onEdit={onEdit} onDelete={onDelete} />
       ))}
     </ul>
   )

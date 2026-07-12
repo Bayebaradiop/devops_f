@@ -1,3 +1,5 @@
+import { useState } from 'react'
+
 const STATUTS = {
   TODO: { libelle: 'A faire', classe: 'bg-slate-200 text-slate-700' },
   IN_PROGRESS: { libelle: 'En cours', classe: 'bg-amber-100 text-amber-800' },
@@ -15,8 +17,20 @@ function formaterDate(iso) {
   })
 }
 
-export default function TaskItem({ task, onEdit }) {
+export default function TaskItem({ task, onEdit, onDelete }) {
   const statut = STATUTS[task.status] ?? STATUTS.TODO
+  const [confirmation, setConfirmation] = useState(false)
+  const [suppression, setSuppression] = useState(false)
+
+  async function supprimer() {
+    setSuppression(true)
+    const ok = await onDelete(task.id)
+    // En cas d'echec le composant reste monte : on rend le bouton a nouveau cliquable
+    if (!ok) {
+      setSuppression(false)
+      setConfirmation(false)
+    }
+  }
 
   return (
     <li className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
@@ -43,12 +57,40 @@ export default function TaskItem({ task, onEdit }) {
         </div>
 
         <div className="flex shrink-0 gap-2">
-          <button
-            onClick={() => onEdit(task)}
-            className="rounded-lg border border-slate-300 px-3 py-1.5 text-sm text-slate-700 hover:bg-slate-50"
-          >
-            Modifier
-          </button>
+          {confirmation ? (
+            <>
+              <span className="self-center text-sm text-slate-600">Supprimer ?</span>
+              <button
+                onClick={supprimer}
+                disabled={suppression}
+                className="rounded-lg bg-red-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-red-700 disabled:opacity-50"
+              >
+                {suppression ? '...' : 'Oui'}
+              </button>
+              <button
+                onClick={() => setConfirmation(false)}
+                disabled={suppression}
+                className="rounded-lg border border-slate-300 px-3 py-1.5 text-sm text-slate-700 hover:bg-slate-50"
+              >
+                Non
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                onClick={() => onEdit(task)}
+                className="rounded-lg border border-slate-300 px-3 py-1.5 text-sm text-slate-700 hover:bg-slate-50"
+              >
+                Modifier
+              </button>
+              <button
+                onClick={() => setConfirmation(true)}
+                className="rounded-lg border border-red-200 px-3 py-1.5 text-sm text-red-700 hover:bg-red-50"
+              >
+                Supprimer
+              </button>
+            </>
+          )}
         </div>
       </div>
     </li>
