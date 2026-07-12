@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import {
   createTask as apiCreate,
   getTasks as apiGetAll,
+  updateTask as apiUpdate,
   messageErreur,
 } from '../services/taskService'
 
@@ -42,5 +43,17 @@ export function useTasks() {
     }
   }, [])
 
-  return { tasks, loading, error, setError, refresh, create }
+  const update = useCallback(async (id, task) => {
+    setError(null)
+    try {
+      const modifiee = await apiUpdate(id, task)
+      setTasks((precedentes) => precedentes.map((t) => (t.id === id ? modifiee : t)))
+      return true
+    } catch (e) {
+      setError(messageErreur(e, 'Impossible de modifier la tache'))
+      return false
+    }
+  }, [])
+
+  return { tasks, loading, error, setError, refresh, create, update }
 }

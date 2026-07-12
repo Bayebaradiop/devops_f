@@ -15,7 +15,7 @@ function formaterDate(iso) {
   })
 }
 
-export default function TaskItem({ task }) {
+export default function TaskItem({ task, onEdit }) {
   const statut = STATUTS[task.status] ?? STATUTS.TODO
 
   return (
@@ -40,6 +40,15 @@ export default function TaskItem({ task }) {
           )}
 
           <p className="mt-2 text-xs text-slate-400">Creee le {formaterDate(task.createdAt)}</p>
+        </div>
+
+        <div className="flex shrink-0 gap-2">
+          <button
+            onClick={() => onEdit(task)}
+            className="rounded-lg border border-slate-300 px-3 py-1.5 text-sm text-slate-700 hover:bg-slate-50"
+          >
+            Modifier
+          </button>
         </div>
       </div>
     </li>
