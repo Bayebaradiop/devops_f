@@ -21,9 +21,16 @@ pipeline {
     }
 
     triggers {
-        // Jenkins tourne en local : GitHub ne peut pas lui envoyer de webhook.
-        // On interroge donc le depot toutes les 2 minutes.
-        pollSCM('H/2 * * * *')
+        // Deux declencheurs, volontairement redondants :
+        //
+        // 1. githubPush() : declenchement INSTANTANE par webhook. GitHub doit
+        //    pouvoir joindre Jenkins, ce qui exige un tunnel (Jenkins tourne en
+        //    local, sur une adresse que l'Internet ne connait pas).
+        //
+        // 2. pollSCM : filet de securite. Jenkins interroge lui-meme GitHub
+        //    toutes les minutes. Fonctionne meme sans tunnel.
+        githubPush()
+        pollSCM('* * * * *')
     }
 
     options {
