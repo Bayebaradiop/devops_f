@@ -29,7 +29,11 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
 
+# On interroge 127.0.0.1 et NON localhost : dans Alpine, "localhost" se resout
+# aussi en ::1 (IPv6), que wget essaie en premier. Nginx n'ecoutant qu'en IPv4,
+# le healthcheck echouait ("Connection refused") alors que le site fonctionnait.
+# Un healthcheck faussement rouge est dangereux : c'est lui qui declenche le rollback.
 HEALTHCHECK --interval=15s --timeout=5s --start-period=5s --retries=3 \
-    CMD wget -qO- http://localhost/ > /dev/null || exit 1
+    CMD wget -qO- http://127.0.0.1/ > /dev/null || exit 1
 
 CMD ["nginx", "-g", "daemon off;"]
