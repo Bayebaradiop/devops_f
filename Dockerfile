@@ -9,8 +9,15 @@ RUN npm ci
 COPY . .
 
 # Vite fige les variables VITE_* AU MOMENT DU BUILD (elles finissent dans le bundle).
-# L'URL de l'API doit donc etre fournie ici, et non au demarrage du conteneur.
-ARG VITE_API_URL=http://localhost:8090
+#
+# Valeur par defaut VIDE, et c'est voulu : le front appelle alors l'API en URL
+# RELATIVE (/api/tasks). Les requetes partent donc vers la meme origine que la
+# page, c'est-a-dire le Nginx de la VM Front, qui les relaie vers le Back.
+#
+# Consequence : la meme image fonctionne derriere une IP comme derriere un nom
+# de domaine, en HTTP comme en HTTPS, sans jamais etre reconstruite. Aucune URL
+# d'infrastructure n'est figee dans le bundle.
+ARG VITE_API_URL=""
 ENV VITE_API_URL=$VITE_API_URL
 RUN npm run build
 
