@@ -13,7 +13,7 @@ export default function App() {
       <div className="mx-auto max-w-2xl px-4 py-8 sm:py-12">
         <header className="mb-6">
           <h1 className="text-2xl sm:text-3xl font-bold text-teal-800">Todo App</h1>
-          <p className="text-slate-500">MediShop — suivi des taches</p>
+          <p className="text-slate-500">MediShop — suivi des taches desmons</p>
         </header>
 
         {error && (
